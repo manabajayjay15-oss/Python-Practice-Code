@@ -1,0 +1,56 @@
+import random
+import sys
+
+TARGET_SCORE = 10
+VALID_CHOICES = ("rock", "paper", "scissors")
+BEATS = {"rock": "scissors", "paper": "rock", "scissors": "paper"}
+
+
+def get_winner(player, computer):
+    if player == computer:
+        return "tie"
+    if BEATS[player] == computer:
+        return "player"
+    return "computer"
+
+
+def get_player_choice():
+    line = sys.stdin.readline()
+    if not line:
+        return None
+    choice = line.strip().lower()
+    return choice if choice in VALID_CHOICES else "rock"
+
+
+def score_tally(winner, score):
+    if winner in score:
+        score[winner] += 1
+
+
+score = {"player": 0, "computer": 0}
+round_number = 1
+
+while score["player"] < TARGET_SCORE and score["computer"] < TARGET_SCORE:
+    player_choice = get_player_choice()
+    if player_choice is None:
+        print("No more choices supplied. Game stopped.")
+        break
+
+    computer_choice = random.choice(VALID_CHOICES)
+    winner = get_winner(player_choice, computer_choice)
+    score_tally(winner, score)
+
+    print("Round {}: You chose {}, computer chose {}.".format(
+        round_number, player_choice, computer_choice
+    ))
+    if winner == "tie":
+        print("It's a tie.")
+    else:
+        print("{} wins the round.".format(winner.capitalize()))
+    print("Score: You {} - Computer {}".format(score["player"], score["computer"]))
+    round_number += 1
+
+if score["player"] == TARGET_SCORE:
+    print("You win the game!")
+elif score["computer"] == TARGET_SCORE:
+    print("The computer wins the game!")
