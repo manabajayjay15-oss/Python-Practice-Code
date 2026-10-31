@@ -19,6 +19,8 @@ def get_player_choice():
     if not line:
         return None
     choice = line.strip().lower()
+    if not choice:
+        return random.choice(VALID_CHOICES)
     return choice if choice in VALID_CHOICES else "rock"
 
 
